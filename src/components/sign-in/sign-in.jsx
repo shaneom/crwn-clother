@@ -1,11 +1,15 @@
 import React from 'react';
 
-import FormInput from '../../components/form-input/form-input';
-import CustomButton from '../../components/custom-button/custom-button';
+import FormInput from '../form-input/form-input';
+import CustomButton from '../custom-button/custom-button';
 
 import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
 
-import './sign-in.scss';
+import {
+    SignInContainer,
+    SignInTitle,
+    ButtonsBarContainer,
+} from './sign-in.styles';
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -17,7 +21,7 @@ class SignIn extends React.Component {
         };
     }
 
-    HandleSubmit = async (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
         const { email, password } = this.state;
@@ -26,11 +30,11 @@ class SignIn extends React.Component {
             await auth.signInWithEmailAndPassword(email, password);
             this.setState({ email: '', password: '' });
         } catch (error) {
-            console.log(error.message);
+            console.log(error);
         }
     };
 
-    HandleChange = (event) => {
+    handleChange = (event) => {
         const { value, name } = event.target;
 
         this.setState({ [name]: value });
@@ -38,16 +42,16 @@ class SignIn extends React.Component {
 
     render() {
         return (
-            <div className="sign-in">
-                <h2>I already have an account</h2>
+            <SignInContainer>
+                <SignInTitle>I already have an account</SignInTitle>
                 <span>Sign in with your email and password</span>
 
-                <form onSubmit={this.HandleSubmit}>
+                <form onSubmit={this.handleSubmit}>
                     <FormInput
                         name="email"
                         type="email"
+                        handleChange={this.handleChange}
                         value={this.state.email}
-                        handleChange={this.HandleChange}
                         label="email"
                         required
                     />
@@ -55,18 +59,18 @@ class SignIn extends React.Component {
                         name="password"
                         type="password"
                         value={this.state.password}
-                        handleChange={this.HandleChange}
+                        handleChange={this.handleChange}
                         label="password"
                         required
                     />
-                    <div className="buttons ">
-                        <CustomButton type="submit">Sign In</CustomButton>
+                    <ButtonsBarContainer>
+                        <CustomButton type="submit"> Sign in </CustomButton>
                         <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
-                            Sign In with Google
+                            Sign in with Google
                         </CustomButton>
-                    </div>
+                    </ButtonsBarContainer>
                 </form>
-            </div>
+            </SignInContainer>
         );
     }
 }
